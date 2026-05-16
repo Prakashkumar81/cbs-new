@@ -1,0 +1,34 @@
+Project structure:
+- src/
+  - components/ : reusable UI blocks like Navbar, StatCard, ContentTable, EmptyState, LoadingSkeleton
+  - context/ : authentication state and navigation handling
+  - services/ : dedicated service layer for auth, content, and approval actions
+  - pages/ : route-based pages for teacher, principal, and public views
+
+Authentication flow:
+- Login uses simulated auth service with localStorage
+- AuthContext provides user/token state and handles redirects
+- Protected route wrapper blocks unauthenticated or wrong-role access
+
+Role-based routing:
+- Teacher routes: /teacher/dashboard, /teacher/upload, /teacher/my-content
+- Principal routes: /principal/dashboard, /principal/pending, /principal/all
+- Public route: /live/:teacherId
+- App routes are guarded by the `PrivateRoute` component in App.jsx
+
+API integration approach:
+- All network and data operations live in `src/services`
+- Components never call axios directly
+- `api.js` includes an auth interceptor for the token header
+- The current backend is mocked but the service layer is designed for replacement with real endpoints
+
+State management approach:
+- Local UI state in each page for loading and listing
+- Auth state is centralized in `AuthContext`
+- Reusable data-fetching logic lives in service functions to keep pages thin
+
+Assumptions:
+- The assignment is implemented as a React + Vite app within `content-broadcast-react`
+- Mock accounts are used for teacher and principal login
+- File upload preview is implemented for image files only and validated by type and size
+- Scheduling states are based on content timestamps but a complex scheduler backend is not required
